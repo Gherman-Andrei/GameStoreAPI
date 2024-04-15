@@ -13,17 +13,20 @@ public static class GamesEndpoints
         new(3, "Joc3", "Tip3", 305.29M, new DateOnly(2013, 2, 12))
     ];
 
-    public static WebApplication MapGamesEndpoints(this WebApplication app){
+    public static RouteGroupBuilder MapGamesEndpoints(this WebApplication app)
+    {
+
+        var group = app.MapGroup("games");
         // GET /games
-        app.MapGet("games", () => games);
+        group.MapGet("/", () => games);
 // GET /games/id
-        app.MapGet("games/{id}", (int id) =>
+        group.MapGet("/{id}", (int id) =>
         {
             GameDto ? game = games.Find(game => game.Id == id);
             return game is null ? Results.NotFound() : Results.Ok(game);
         });
 // POST /games
-        app.MapPost("games", (CreateGameDto newGame) =>
+        group.MapPost("/", (CreateGameDto newGame) =>
         {
             GameDto game = new(games.Count +1, newGame.Name,newGame.Type, newGame.Price,newGame.ReleaseDate);
             games.Add(game);
@@ -31,7 +34,7 @@ public static class GamesEndpoints
             return Results.CreatedAtRoute(GetgameEndpointName, new{id = game.Id}, game);
         });
 //PUT /games/id
-        app.MapPut("games/{id}", (int id, UpdateGameDto updategame) =>
+        group.MapPut("/{id}", (int id, UpdateGameDto updategame) =>
         {
             var index = games.FindIndex(game => game.Id == id);
 
@@ -51,13 +54,13 @@ public static class GamesEndpoints
 
 // DELETE
 
-        app.MapDelete("games/{id}", (int id) =>
+        group.MapDelete("/{id}", (int id) =>
         {
             games.RemoveAll(game => game.Id == id);
             return Results.NoContent();
         });
 
-        return app;
+        return group;
     }
 
 }
