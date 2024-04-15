@@ -1,0 +1,27 @@
+﻿GET http://localhost:5087/games/
+
+###
+GET http://localhost:5087/games/4
+
+###
+POST http://localhost:5087/games
+Content-Type: application/json
+
+{
+  "name": "Minecraft",
+  "type": "Kids",
+  "price": 19.99,
+  "releaseDate" : "2011-11-02"
+}
+###
+PUT http://localhost:5087/games/4
+Content-Type: application/json
+
+{
+  "name": "Test",
+  "type": "K2s",
+  "price": 39.99,
+  "releaseDate" : "2011-11-02"
+}
+###
+DELETE http://localhost:5087/games/4
